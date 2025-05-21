@@ -7,7 +7,7 @@ function renderStation(station, container) {
 
     div.innerHTML = `
         <img src="${station.favicon || './res/default-icon.png'}" alt="📻" style="vertical-align: middle; max-width: 8rem;" />
-        <strong>${station.name}</strong>
+        <strong><a href="${station.url}">${station.name}</a></strong>
         <span class="status">Checking...</span><br/>
         <!-- <a href="${station.url}" target="_blank">${station.url}</a> -->`;
     div.appendChild(playerElement);
