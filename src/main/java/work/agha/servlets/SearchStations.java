@@ -5,7 +5,10 @@ import javax.servlet.http.*;
 import javax.servlet.ServletException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import com.google.gson.Gson;
 
@@ -24,6 +27,7 @@ public class SearchStations extends HttpServlet {
         String query = request.getParameter("q");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+        query = URLEncoder.encode(query, "UTF-8").replace("+", "%20");
 
         try (PrintWriter out = response.getWriter()) {
             Optional<String> endpoint = new EndpointDiscovery(USER_AGENT).discover();
