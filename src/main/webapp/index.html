@@ -7,9 +7,15 @@
         <script src="app.js"></script>
     </head>
     <body>
-        <h1>Radio Station Browser</h1>
+        <bar>
+            <input type="text" id="searchInput" placeholder="Search for a station" onchange="searchStations()" />
+            <div class="access">
+                <a href="login.html">login</a>
+                <a href="register.html">register</a>
+                <h1>Radio Station Browser</h1>
+            </div>
+        </bar>
         <!-- <button onclick="fetchStations()">Load Stations</button> -->
-        <input type="text" id="searchInput" placeholder="Search for a station" onchange="console.log(123);searchStations()" />
         <!-- <button onclick="searchStations()">Search</button> -->
         <div id="stations"></div>
     </body>
