@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.util.*;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 import com.google.gson.Gson;
 
