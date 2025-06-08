@@ -13,3 +13,23 @@ document.addEventListener('DOMContentLoaded', () => {
     setupRegister();
     checkLoginStatus();
 });
+
+// In your app.js or a <script> tag
+function updateStickyTopOffset() {
+    const topBar = document.querySelector('.top-bar');
+    const playerPanel = document.querySelector('#playerPanel');
+
+    if (topBar && playerPanel) {
+        const topBarBottom = topBar.getBoundingClientRect().bottom + window.scrollY;
+        const extraOffset = 16;
+        playerPanel.style.top = `${topBarBottom + extraOffset}px`;
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const playerPanel = document.querySelector('#playerPanel');
+    playerPanel.style.position = 'sticky';
+    updateStickyTopOffset();
+});
+
+window.addEventListener('resize', updateStickyTopOffset);

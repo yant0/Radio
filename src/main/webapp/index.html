@@ -1,45 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>Radio Stations</title>
         <meta charset="UTF-8">
+        <title>Radio Stations</title>
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-        <!-- <script src="app.js" defer="false"></script> -->
         <script type="module" src="./scripts/app.js"></script>
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <h1>Radio Station Browser</h1>
-        <bar>
-            <input type="text" id="searchInput" placeholder="Search for a station" onchange="searchStations()" />
-            <!-- Button to open modal -->
-            <button id="openModalBtn">Login / Register</button>
 
-            <!-- Modal -->
-            <div id="modal" class="modal">
-                <div class="modal-content">
-                    <!-- <span class="close-btn" id="closeModalBtn"></span> -->
-                    <div class="tabs">
-                        <div id="loginTab" class="tab active">Login</div>
-                        <div id="registerTab" class="tab">Register</div>
-                    </div>
-                    <!-- Login Form -->
-                    <form id="loginForm" class="active">
-                        <input type="text" name="username" placeholder="Username" required />
-                        <input type="password" name="password" placeholder="Password" required />
-                        <button type="submit">Login</button>
-                    </form>
-                    <div id="loginMessage"></div>
-                    <!-- Register Form -->
-                    <form id="registerForm">
-                        <input type="text" name="username" placeholder="Username" required />
-                        <input type="email" name="email" placeholder="Email" required />
-                        <input type="password" name="password" placeholder="Password" required />
-                        <button type="submit">Register</button>
-                    </form>
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <h1>Radio<span style="color: gray; font-weight: normal;">.agha.work</span></h1>
+            <input type="text" id="searchInput" placeholder="Search for a station..." />
+            <button id="openModalBtn">Login / Register</button>
+        </header>
+
+        <!-- Login/Register Modal -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <div class="tabs">
+                    <div id="loginTab" class="tab active">Login</div>
+                    <div id="registerTab" class="tab">Register</div>
                 </div>
+
+                <!-- Login Form -->
+                <form id="loginForm" class="active">
+                    <input type="text" name="username" placeholder="Username" required />
+                    <input type="password" name="password" placeholder="Password" required />
+                    <button type="submit">Login</button>
+                </form>
+                <div id="loginMessage"></div>
+
+                <!-- Register Form -->
+                <form id="registerForm">
+                    <input type="text" name="username" placeholder="Username" required />
+                    <input type="email" name="email" placeholder="Email" required />
+                    <input type="password" name="password" placeholder="Password" required />
+                    <button type="submit">Register</button>
+                </form>
             </div>
-        </bar>
-        <div id="stations"></div>
+        </div>
+        <main class="container">
+            <!-- Stations Section -->
+            <section id="stations">
+                <!-- JS will populate stations with play buttons -->
+            </section>
+
+            <!-- Right Player Panel -->
+            <aside id="playerPanel">
+                <ul id="stationHistory"></ul>
+            </aside>
+        </main>
     </body>
 </html>

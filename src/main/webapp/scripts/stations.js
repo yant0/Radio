@@ -17,15 +17,15 @@ export function searchStations() {
     fetch(`searchStations?q=${encodeURIComponent(query)}`)
         .then(res => res.json())
         .then(data => {
-            const container = document.getElementById('stations');
-            container.innerHTML = '';
+            const stationContainer = document.getElementById('stations');
+            stationContainer.innerHTML = '';
 
             if (data.length === 0) {
-                container.innerHTML = '<p>No stations found.</p>';
+                stationContainer.innerHTML = '<p>No stations found.</p>';
                 return;
             }
 
-            data.forEach(station => renderStation(station, container));
+            data.forEach(station => renderStation(station, stationContainer));
         })
         .catch(err => {
             console.error(err);
