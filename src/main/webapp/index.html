@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Radio Stations</title>
+        <title>Radio Agha</title>
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
         <script type="module" src="./scripts/app.js"></script>
         <link rel="stylesheet" href="style.css">
@@ -11,7 +11,7 @@
 
         <!-- Top Bar -->
         <header class="top-bar">
-            <h1>Radio<span style="color: gray; font-weight: normal;">.agha.work</span></h1>
+            <h1><span onclick="fetchStations()" style="cursor: pointer;">Radio</span><span style="color: gray; font-weight: normal;">.agha.work</span></h1>
             <input type="text" id="searchInput" placeholder="Search for a station..." />
             <button id="openModalBtn">Login / Register</button>
         </header>
@@ -42,11 +42,19 @@
             </div>
         </div>
         <main class="container">
-            <!-- Stations Section -->
-            <section id="stations">
-                <!-- JS will populate stations with play buttons -->
-            </section>
+            <div class="content-with-filters">
+                <!-- Filter bar -->
+                <div id="filterBar" class="filter-bar">
+                    <button class="filter-btn" id="localBtn"><span id="flag">🌐</span> Local Stations</button>
+                    <button class="filter-btn">🔥 Popular</button>
+                    <button class="filter-btn">🎵 Music</button>
+                    <button class="filter-btn">📰 News</button>
+                    <button class="filter-btn">🎙️ Talk</button>
+                </div>
 
+                <!-- Stations Section -->
+                <section id="stations"></section>
+            </div>
             <!-- Right Player Panel -->
             <aside id="playerPanel">
                 <ul id="stationHistory"></ul>

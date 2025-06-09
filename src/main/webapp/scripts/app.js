@@ -4,6 +4,7 @@ import { setupLogin } from './auth/login.js';
 import { setupRegister } from './auth/register.js';
 import { checkLoginStatus } from './auth/session.js';
 
+window.fetchStations = fetchStations;
 window.onload = fetchStations;
 document.getElementById('searchInput').addEventListener('change', searchStations);
 
@@ -15,21 +16,22 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // In your app.js or a <script> tag
-function updateStickyTopOffset() {
+function adjustPlayerOffset() {
+    const playerPanel = document.getElementById('playerPanel');
     const topBar = document.querySelector('.top-bar');
-    const playerPanel = document.querySelector('#playerPanel');
 
-    if (topBar && playerPanel) {
-        const topBarBottom = topBar.getBoundingClientRect().bottom + window.scrollY;
-        const extraOffset = 16;
-        playerPanel.style.top = `${topBarBottom + extraOffset}px`;
+    // Only apply offset on wider screens
+    if (window.innerWidth > 768) {
+        const topBarHeight = topBar.offsetHeight;
+        playerPanel.style.top = `${topBarHeight + 16}px`; // 16px = 1rem spacing
+        playerPanel.style.position = 'sticky';
+    } else {
+        // Reset for mobile
+        playerPanel.style.top = '';
+        playerPanel.style.position = '';
     }
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-    const playerPanel = document.querySelector('#playerPanel');
-    playerPanel.style.position = 'sticky';
-    updateStickyTopOffset();
-});
-
-window.addEventListener('resize', updateStickyTopOffset);
+// Call on load and resize
+window.addEventListener('DOMContentLoaded', adjustPlayerOffset);
+window.addEventListener('resize', adjustPlayerOffset);

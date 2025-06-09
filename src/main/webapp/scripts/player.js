@@ -12,7 +12,6 @@ export function playStation(station) {
     // Create wrapper for the station card
     const stationCard = document.createElement('div');
     stationCard.className = 'station-card';
-    stationCard.style.marginBottom = '20px';
 
     // Title
     const title = document.createElement('h3');

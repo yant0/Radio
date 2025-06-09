@@ -1,6 +1,16 @@
 import { renderStation } from './stationRenderer.js';
 
+const stationsContainer = document.getElementById('stations');
+export function makeSpinner(container) {
+    container.innerHTML = ''; // clear it first
+    const spinner = document.createElement("div");
+    spinner.className = "spinner";
+    container.appendChild(spinner);
+}
+
+
 export function fetchStations() {
+    makeSpinner(stationsContainer)
     fetch('stations')
         .then(res => res.json())
         .then(data => {
@@ -12,6 +22,7 @@ export function fetchStations() {
 
 export function searchStations() {
     const query = document.getElementById('searchInput').value.trim();
+    makeSpinner(stationsContainer)
     if (!query) return;
 
     fetch(`searchStations?q=${encodeURIComponent(query)}`)
