@@ -26,21 +26,10 @@ public class ListStations extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            Optional<String> endpoint = new EndpointDiscovery(USER_AGENT).discover();
-            if (endpoint.isEmpty()) {
-                try {
-                    if (endpoint.isEmpty()) { // fallback
-                        endpoint = Optional.of("https://de1.api.radio-browser.info");
-                    }
-                } catch (Exception e) {
-                    response.setStatus(500);
-                    out.print("{\"error\": \"No API endpoint found\"}");
-                    return;
-                }
-            }
+            String endpoint = "https://all.api.radio-browser.info";
             RadioBrowser radioBrowser = new RadioBrowser(
                     ConnectionParams.builder()
-                            .apiUrl(endpoint.get())
+                            .apiUrl(endpoint)
                             .userAgent(USER_AGENT)
                             .timeout(TIMEOUT_DEFAULT)
                             .build());

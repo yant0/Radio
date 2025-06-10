@@ -9,11 +9,10 @@ import java.net.URLEncoder;
 import java.util.*;
 
 import com.google.gson.Gson;
-
 import de.sfuhrm.radiobrowser4j.*;
 
-@WebServlet("/searchStations")
-public class SearchStations extends HttpServlet {
+@WebServlet("/searchStationsByLocale")
+public class SearchCountry extends HttpServlet {
 
     private static final int TIMEOUT_DEFAULT = 5000;
     private static final String USER_AGENT = "radio.agha.work/v1";
@@ -22,10 +21,17 @@ public class SearchStations extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String query = request.getParameter("q");
+        String country = request.getParameter("country");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        query = URLEncoder.encode(query, "UTF-8").replace("+", "%20");
+
+        if (country == null || country.isEmpty()) {
+            response.setStatus(400);
+            response.getWriter().write("{\"error\": \"Missing 'country' parameter\"}");
+            return;
+        }
+
+        country = URLEncoder.encode(country, "UTF-8").replace("+", "%20");
 
         try (PrintWriter out = response.getWriter()) {
             String endpoint = "https://all.api.radio-browser.info";
@@ -37,7 +43,8 @@ public class SearchStations extends HttpServlet {
                             .build());
 
             List<Station> stations = radioBrowser
-                    .listStationsBy(SearchMode.BYNAME, query, ListParameter.create().order(FieldName.NAME))
+                    .listStationsBy(SearchMode.BYCOUNTRYCODEEXACT, country,
+                            ListParameter.create().order(FieldName.NAME))
                     .limit(20)
                     .toList();
 
