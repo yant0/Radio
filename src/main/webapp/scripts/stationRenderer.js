@@ -1,12 +1,14 @@
 import { playStation } from './player.js';
 import { checkStreamStatus } from './streamStatus.js';
+import { loadFavoriteStations } from './loadFavorites.js';
 
 export function renderStation(station, container) {
-    // Outer wrapper
     const stationDiv = document.createElement('div');
-    stationDiv.classList.add('station');
+    stationDiv.classList.add('station-list-item');
 
     // Image
+    const imgWrapper = document.createElement('div');
+    imgWrapper.className = 'station-img';
     const img = document.createElement('img');
     img.src = station.favicon || './res/default-icon.png';
     img.alt = `📻 ${station.name}`;
@@ -14,61 +16,77 @@ export function renderStation(station, container) {
         img.onerror = null;
         img.src = './res/default-icon.png';
     };
-    stationDiv.appendChild(img);
+    img.style.cursor = 'pointer';
+    img.addEventListener('click', () => playStation(station));
+    imgWrapper.appendChild(img);
 
-    // Content wrapper
-    const contentDiv = document.createElement('div');
-    contentDiv.classList.add('station-content');
+    // Name
+    const nameDiv = document.createElement('div');
+    nameDiv.className = 'station-name';
 
-    // Wrapper for title + status
-    const headerDiv = document.createElement('div');
-    headerDiv.classList.add('station-header');
-
-    // Title
-    const title = document.createElement('strong');
-    title.classList.add('station-title');
-
-    const link = document.createElement('a');
-    link.href = station.url;
-    link.target = '_blank';
-    link.textContent = station.name;
-
-    title.appendChild(link);
-    headerDiv.appendChild(title);
+    const nameText = document.createTextNode(station.name);
+    nameDiv.appendChild(nameText);
 
     // Status
-    const status = document.createElement('span');
-    status.classList.add('status');
+    const status = document.createElement('div');
+    status.className = 'station-status';
     status.textContent = 'Checking...';
-    headerDiv.appendChild(status);
+    nameDiv.appendChild(status);
 
-    // Add to content
-    contentDiv.appendChild(headerDiv);
+    // Meta Info
+    const meta = document.createElement('div');
+    meta.className = 'station-meta';
 
-    // Buttons wrapper
-    const controlsDiv = document.createElement('div');
-    controlsDiv.classList.add('station-controls');
+    // Country (emoji if possible)
+    if (station.country) {
+        const country = document.createElement('div');
+        country.className = 'meta-item';
+        country.textContent = getFlagEmoji(station.country) + ' ' + station.country.toUpperCase();
+        meta.appendChild(country);
+    }
 
-    const playBtn = document.createElement('button');
-    playBtn.classList.add('play-btn');
-    playBtn.textContent = '▶️ Play';
-    playBtn.addEventListener('click', () => {
-        playStation(station);
-    });
+    // Codec
+    if (station.codec) {
+        const codec = document.createElement('div');
+        codec.className = 'meta-item';
+        codec.textContent = station.codec.toUpperCase();
+        meta.appendChild(codec);
+    }
 
+    // HLS
+    if (station.hls === '1') {
+        const hls = document.createElement('div');
+        hls.className = 'meta-item';
+        hls.textContent = 'HLS';
+        meta.appendChild(hls);
+    }
+
+    // Tags
+    if (station.tags) {
+        const tags = document.createElement('div');
+        tags.className = 'meta-item';
+        tags.textContent = station.tags;
+        meta.appendChild(tags);
+    }
+
+    nameDiv.appendChild(meta);
+
+    // Favorite button
     const favBtn = document.createElement('button');
-    favBtn.classList.add('favorite-btn');
-    favBtn.textContent = '⭐ Favorite';
+    favBtn.className = 'station-star';
+    favBtn.textContent = '⭐';
+    favBtn.style.background = 'none';
+    favBtn.style.color = '#aaa';
     favBtn.addEventListener('click', () => {
-        favoriteStation(station);
+        const isSelected = favBtn.classList.toggle('selected');
+        favBtn.style.color = isSelected ? '#ffc107' : '#aaa'; // yellow star when selected
+        favoriteStation(station, favBtn);
     });
-
-    controlsDiv.appendChild(playBtn);
-    controlsDiv.appendChild(favBtn);
-    contentDiv.appendChild(controlsDiv);
 
     // Assemble
-    stationDiv.appendChild(contentDiv);
+    stationDiv.appendChild(imgWrapper);
+    stationDiv.appendChild(nameDiv);
+    stationDiv.appendChild(favBtn);
     container.appendChild(stationDiv);
 
     // Async status check
@@ -82,15 +100,21 @@ export function renderStation(station, container) {
     });
 }
 
-// TODO move this IN JAVA SERVLET 😭
-function favoriteStation(station) {
-    fetch('favorite', {
+// Helper: Convert country code to flag emoji
+function getFlagEmoji(countryCode) {
+    if (!countryCode) return '';
+    return countryCode.toUpperCase()
+        .replace(/./g, char => String.fromCodePoint(127397 + char.charCodeAt()));
+}
+
+
+function favoriteStation(station, btn) {
+    fetch('addFavorite', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            uuid: station.stationuuid,
             name: station.name,
             url: station.url,
             favicon: station.favicon
@@ -98,10 +122,11 @@ function favoriteStation(station) {
     })
         .then(res => res.json())
         .then(data => {
-            alert(data.message || "Favorited!");
+            btn.disabled = true;
+            btn.classList.add('disabled');
+            loadFavoriteStations();
         })
         .catch(err => {
             console.error("Favorite failed", err);
-            alert("Could not favorite this station.");
         });
 }

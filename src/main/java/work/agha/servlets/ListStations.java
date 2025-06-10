@@ -46,6 +46,10 @@ public class ListStations extends HttpServlet {
                 entry.put("name", s.getName());
                 entry.put("url", s.getUrl());
                 entry.put("favicon", s.getFavicon());
+                entry.put("country", s.getCountryCode());
+                entry.put("codec", s.getCodec());
+                entry.put("hls", s.getHls());
+                entry.put("tags", s.getTags());
                 result.add(entry);
             }
 

@@ -1,37 +1,45 @@
-import { fetchStations, searchStations } from './stations.js';
-import { setupModal } from './auth/modal.js';
-import { setupLogin } from './auth/login.js';
-import { setupRegister } from './auth/register.js';
+import { fetchStations, searchStations, searchStationsByLocale, searchStationsByCountry } from './stations.js';
 import { checkLoginStatus } from './auth/session.js';
 
-window.fetchStations = fetchStations;
-window.onload = fetchStations;
-document.getElementById('searchInput').addEventListener('change', searchStations);
-
 document.addEventListener('DOMContentLoaded', () => {
-    setupModal();
-    setupLogin();
-    setupRegister();
+    fetchStations()
+    adjustPlayerOffset()
     checkLoginStatus();
+
+    const countryButtons = document.querySelectorAll('.country-btn');
+    countryButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const country = btn.getAttribute('data-country');
+            if (!country) return;
+
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            searchStationsByCountry(country);
+        });
+    });
+
 });
 
-// In your app.js or a <script> tag
+window.addEventListener('resize', adjustPlayerOffset);
+
+document.getElementById('title-bar').addEventListener('click', fetchStations);
+document.getElementById('popular').addEventListener('click', fetchStations);
+document.getElementById('localBtn').addEventListener('click', searchStationsByLocale);
+document.getElementById('searchInput').addEventListener('change', searchStations);
+
+// todo move this
 function adjustPlayerOffset() {
-    const playerPanel = document.getElementById('playerPanel');
+    const sideSection = document.getElementById('side-sections');
     const topBar = document.querySelector('.top-bar');
 
-    // Only apply offset on wider screens
     if (window.innerWidth > 768) {
         const topBarHeight = topBar.offsetHeight;
-        playerPanel.style.top = `${topBarHeight + 16}px`; // 16px = 1rem spacing
-        playerPanel.style.position = 'sticky';
+        sideSection.style.top = `${topBarHeight + 32}px`;
+        sideSection.style.position = 'sticky';
     } else {
         // Reset for mobile
-        playerPanel.style.top = '';
-        playerPanel.style.position = '';
+        sideSection.style.top = '';
+        sideSection.style.position = '';
     }
 }
 
-// Call on load and resize
-window.addEventListener('DOMContentLoaded', adjustPlayerOffset);
-window.addEventListener('resize', adjustPlayerOffset);

@@ -10,6 +10,7 @@ body {
     background-color: #f5f5f5;
 }
 
+/* Top Bar */
 .top-bar {
     display: flex;
     justify-content: space-between;
@@ -17,10 +18,9 @@ body {
     background-color: #1e1e1e;
     padding: 0.75rem 1.5rem;
     color: white;
-
     position: sticky;
     top: 0;
-    z-index: 999;
+    z-index: 99;
 
     input[type="text"] {
         padding: 0.5rem;
@@ -37,23 +37,42 @@ body {
         border-radius: 4px;
         cursor: pointer;
     }
+
+    #title-bar {
+        cursor: pointer;
+    }
 }
 
+/* Main Layout */
 .container {
     display: flex;
     flex-wrap: wrap;
     padding: 1rem;
 
-    #playerPanel {
+    .content-with-filters {
+        margin-right: 1rem;
+        flex: 2;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .side-sections {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
         flex: 1;
+        min-width: 280px;
+        position: sticky;
+        top: 1rem;
+        align-self: flex-start;
+    }
+
+    .section-box {
         background-color: white;
         padding: 1rem;
         border-radius: 8px;
-        height: fit-content;
-        min-width: 280px;
-        position: sticky;
         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-
+        height: fit-content;
 
         h3 {
             margin-bottom: 0.5rem;
@@ -61,7 +80,7 @@ body {
 
         img {
             width: 100%;
-            height: 100%;
+            height: auto;
             max-height: 300px;
             object-fit: cover;
         }
@@ -73,15 +92,12 @@ body {
         }
     }
 
-    /* New layout wrapper for filters + stations */
-    .content-with-filters {
-        margin-right: 1rem;
-        flex: 2;
+    #favoritesContainer {
         display: flex;
         flex-direction: column;
+        gap: 0.5rem;
     }
 
-    /* Filter Bar Styling */
     #filterBar {
         display: flex;
         flex-wrap: wrap;
@@ -107,7 +123,7 @@ body {
     }
 
     #stations {
-        .station {
+        .station-list-item {
             display: flex;
             align-items: center;
             background: white;
@@ -116,76 +132,68 @@ body {
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 
-            img {
-                height: 100%;
-                width: 100%;
-                max-width: 8rem;
-                vertical-align: middle;
-                object-fit: contain;
+            .station-img {
+                flex-shrink: 0;
+                width: 8rem;
+                height: 8rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
             }
 
-            .station-content {
+            .station-name {
                 flex: 1;
                 margin-left: 1rem;
+                font-weight: bold;
+                font-size: 1.25rem;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
 
-                .station-header {
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
-                    margin-bottom: 0.25rem;
-
-                    .station-title {
-                        font-weight: bold;
-                        font-size: 1rem;
-
-                        a {
-                            color: #333;
-                            text-decoration: none;
-                            font-weight: bold;
-                            font-size: 1.1rem;
-                            margin-left: 0.5rem;
-                        }
-                    }
-
-                    .status {
-                        color: green;
-                    }
+                .station-status {
+                    margin-top: 0.3rem;
+                    font-size: 0.9rem;
+                    color: green;
                 }
 
-                .station-controls {
-                    margin-top: 0.5rem;
+                .station-meta {
+                    margin-top: 0.4rem;
+                    font-size: 0.85rem;
+                    color: #666;
                     display: flex;
+                    flex-wrap: wrap;
                     gap: 0.5rem;
 
-                    .play-btn {
-                        background-color: #1e90ff;
-                        color: white;
-                        border: none;
-                        padding: 0.4rem 0.75rem;
+                    .meta-item {
+                        background-color: #f0f0f0;
                         border-radius: 4px;
-                        cursor: pointer;
-
-                        &:hover {
-                            background-color: #0d6efd;
-                        }
-                    }
-
-                    .favorite-btn {
-                        margin-left: 1rem;
-                        background-color: gold;
-                        border: none;
-                        padding: 0.3rem 0.6rem;
-                        border-radius: 4px;
-                        cursor: pointer;
+                        padding: 0.2rem 0.5rem;
                     }
                 }
             }
+
+            .station-star {
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                margin-left: 1rem;
+            }
         }
     }
+}
 
+/* Modal Styling */
+.modal.active {
+    display: block;
 }
 
 .modal {
@@ -198,6 +206,7 @@ body {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.6);
+
 
     .modal-content {
         background-color: white;
@@ -218,41 +227,88 @@ body {
                 cursor: pointer;
                 background-color: #eee;
                 border-bottom: 2px solid transparent;
+            }
 
-                &.active {
-                    background-color: #ddd;
-                    border-bottom: 2px solid #333;
-                }
+            .tab.active {
+                background-color: #ddd;
+                border-bottom: 2px solid #333;
             }
         }
 
         form {
             display: none;
             flex-direction: column;
+        }
 
-            &.active {
-                display: flex;
-            }
+        form.active {
+            display: flex;
+        }
 
-            input {
-                margin-bottom: 0.5rem;
-                padding: 0.5rem;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-            }
+        form input {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
 
-            button {
-                padding: 0.5rem;
-                background-color: #1e1e1e;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-            }
+        form button {
+            padding: 0.5rem;
+            background-color: #1e1e1e;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
         }
     }
 }
 
+
+/* Favorite Stations Section */
+.favorites-section {
+    margin-top: 20px;
+
+    h4 {
+        background: red;
+        color: white;
+        padding: 4px;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+}
+
+/* Favorite Item Layout */
+.favorite-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+
+    .favorite-img {
+        width: 50px;
+        height: 50px;
+        flex-shrink: 0;
+    }
+
+    .favorite-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .favorite-name {
+        flex-grow: 1;
+        font-weight: bold;
+    }
+
+    .favorite-star {
+        font-size: 20px;
+        cursor: pointer;
+    }
+}
+
+/* Spinner */
 .spinner {
     margin: 2rem auto;
     width: 40px;
@@ -263,13 +319,30 @@ body {
     animation: spin 0.8s linear infinite;
 }
 
+.station-card img {
+    transition: transform 0.2s ease;
+}
+
+.station-card img:hover {
+    transform: scale(1.05);
+}
+
+.station-img img {
+    transition: transform 0.2s ease;
+}
+
+.station-img img:hover {
+    transform: scale(1.05);
+}
+
+
 @keyframes spin {
     to {
         transform: rotate(360deg);
     }
 }
 
-
+/* Responsive Mobile Styles */
 @media (max-width: 768px) {
     h1 {
         display: none;
@@ -284,27 +357,25 @@ body {
         }
     }
 
-    #playerPanel {
+    #playerSection {
         position: fixed !important;
         bottom: 0;
         left: 0;
         width: 100%;
         border-radius: 0;
         padding: 0.75rem 1rem;
-        z-index: 998;
+        z-index: 98;
         background-color: #1e1e1e !important;
         display: flex;
         flex-direction: column;
         gap: 0.5rem;
     }
 
-
-    /* Hide everything except h3 and audio */
-    #playerPanel img {
-        display: none
+    #playerSection img {
+        display: none;
     }
 
-    #playerPanel h3 {
+    #playerSection h3 {
         font-size: 1rem;
         margin: 0;
         font-weight: bold;
@@ -316,6 +387,7 @@ body {
     }
 }
 
+/* Fonts */
 @font-face {
     font-family: "Line Seed";
     src: url("res/fonts/LINESeedJP-Regular.woff2") format('woff');

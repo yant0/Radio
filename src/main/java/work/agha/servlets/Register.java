@@ -21,7 +21,7 @@ public class Register extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = DBConnection.getConnection()) {
             PreparedStatement check = conn.prepareStatement("SELECT * FROM users WHERE username = ? OR email = ?");
             check.setString(1, username);
             check.setString(2, email);

@@ -11,7 +11,7 @@
 
         <!-- Top Bar -->
         <header class="top-bar">
-            <h1><span onclick="fetchStations()" style="cursor: pointer;">Radio</span><span style="color: gray; font-weight: normal;">.agha.work</span></h1>
+            <h1><span id="title-bar">Radio</span><span style="color: gray; font-weight: normal;">.agha.work</span></h1>
             <input type="text" id="searchInput" placeholder="Search for a station..." />
             <button id="openModalBtn">Login / Register</button>
         </header>
@@ -45,20 +45,29 @@
             <div class="content-with-filters">
                 <!-- Filter bar -->
                 <div id="filterBar" class="filter-bar">
+                    <button class="filter-btn" id="popular">🔥 Popular</button>
                     <button class="filter-btn" id="localBtn"><span id="flag">🌐</span> Local Stations</button>
-                    <button class="filter-btn">🔥 Popular</button>
-                    <button class="filter-btn">🎵 Music</button>
-                    <button class="filter-btn">📰 News</button>
-                    <button class="filter-btn">🎙️ Talk</button>
+                    <button class="filter-btn country-btn" data-country="JP">🇯🇵 Japan</button>
+                    <button class="filter-btn country-btn" data-country="US">🇺🇸 USA</button>
+                    <button class="filter-btn country-btn" data-country="GB">🇬🇧 UK</button>
                 </div>
 
                 <!-- Stations Section -->
                 <section id="stations"></section>
             </div>
             <!-- Right Player Panel -->
-            <aside id="playerPanel">
-                <ul id="stationHistory"></ul>
-            </aside>
+            <section id="side-sections" class="side-sections">
+                <div id="playerSection" class="section-box">
+                    <div class="station-card">
+                        <h3>Pick your radio!</h3><img src="./res/default-icon.png" alt="📻">
+                        <div><audio controls="" style="display: block;" src="" autoplay=""></audio></div>
+                    </div>
+                </div>
+                <div id="favoritesSection" class="section-box">
+                    <h3>Favorites</h3>
+                    <div id="favoritesContainer"></div>
+                </div>
+            </section>
         </main>
     </body>
 </html>

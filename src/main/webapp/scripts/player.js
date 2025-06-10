@@ -1,10 +1,9 @@
 export function playStation(station) {
-    const playerPanel = document.getElementById('playerPanel');
-
-    if (!playerPanel) return;
+    const playerSection = document.getElementById('playerSection');
+    if (!playerSection) return;
 
     // Clear previously played station content
-    playerPanel.innerHTML = '';
+    playerSection.innerHTML = '';
 
     const url = station.url;
     const isHLS = url.endsWith('.m3u8');
@@ -22,14 +21,18 @@ export function playStation(station) {
     const img = document.createElement('img');
     img.src = station.favicon || './res/default-icon.png';
     img.alt = `📻 ${station.name}`;
+    img.style.cursor = 'pointer';
     img.onerror = () => {
         img.onerror = null;
         img.src = './res/default-icon.png';
     };
+
     stationCard.appendChild(img);
 
     // Media player
     const mediaContainer = document.createElement('div');
+
+    let audioOrVideo;
 
     if (isHLS) {
         const video = document.createElement('video');
@@ -48,6 +51,7 @@ export function playStation(station) {
             video.innerHTML = '<p>Your browser does not support HLS playback.</p>';
         }
 
+        audioOrVideo = video;
         mediaContainer.appendChild(video);
     } else {
         const audio = document.createElement('audio');
@@ -55,11 +59,22 @@ export function playStation(station) {
         audio.style.display = 'block';
         audio.src = url;
         audio.autoplay = true;
+
+        audioOrVideo = audio;
         mediaContainer.appendChild(audio);
     }
 
-    stationCard.appendChild(mediaContainer);
+    // Add play/pause toggle on image click
+    img.addEventListener('click', () => {
+        if (!audioOrVideo) return;
 
-    // Append the new card to the panel
-    playerPanel.appendChild(stationCard);
+        if (audioOrVideo.paused) {
+            audioOrVideo.play();
+        } else {
+            audioOrVideo.pause();
+        }
+    });
+
+    stationCard.appendChild(mediaContainer);
+    playerSection.appendChild(stationCard);
 }
